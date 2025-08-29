@@ -31,10 +31,11 @@ docker run -it --rm \
   -v ~/.n8n:/home/node/.n8n \
   n8nio/n8n
 
----
 - `5678` → n8n 기본 포트  
 - `~/.n8n` → Credential 및 설정 저장 위치  
 - 브라우저에서 `http://localhost:5678` 접속 후 n8n UI 확인
+
+---
 
 
 ## 1. n8n 워크플로우 기본 만들기

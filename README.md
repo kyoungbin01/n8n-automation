@@ -115,11 +115,76 @@ AI 활용 방식은 두 가지입니다:
 - 처음이라면 노드 안 **Credentials → Add credential** 에서 OAuth 인증/키 등록
 
 ### 4-3) 타임존 및 환경 설정
-- **Workflow Settings**(오른쪽 상단 톱니) → **Timezone**: `Asia/Seoul`
-- Docker를 백그라운드로 돌리려면:
+- **Workflow Settings** → **Timezone**: `Asia/Seoul`
+
+### 4-4) 채팅으로 테스트 실행
+- 트리거: **When chat message received**
+- 워크플로우 화면 상단의 **Open chat** 버튼 클릭 → 대화창에서 아래 프롬프트로 테스트
+
+#### 예시 프롬프트 & 기대 동작
+- `내일 오후 3시에 홍길동과 미팅 추가해줘. 참석자도 넣어줘.`  
+  - 일정 생성 → 리마인더 이메일 여부 확인 후 **Send Email** 실행  
+- `오늘 일정 브리핑해줘`  
+  - 오늘 일정 조회 및 요약
+
+### 4-5) 실행 로그 확인
+- **Executions** 탭에서 노드별 입력/출력 및 AI Tool 호출 확인 가능
+
+### 4-6) (선택) 공개 채팅 링크 만들기
+- 트리거 노드 → **Make chat publicly available** 활성화  
+- **Hosted Chat** URL 발급 후 공유 가능
+
+---
+
+## 5. 응용 1 – 뉴스 요약 챗봇 확장
+
+- 사용 파일: **[up_secretary.json](./up_secretary.json)**
+
+### 추가 기능
+- **RSS Read** → 기술 뉴스 RSS 피드 수집  
+- **AI Agent** → 기사 요약  
+- **Gmail Tool** → 요약 결과 메일 발송  
+- (선택) **Schedule Trigger** → 매일/매주 정기 브리핑  
+
+### 예시 프롬프트
+- `오늘의 IT 뉴스 3줄 요약해줘`  
+  - RSS → 요약 → 메일 여부 확인
+
+---
+
+## 6. 응용 2 – 외부 웹/스크립트에서 명령 내리기 (Webhook)
+
+### Webhook 설정
+- 노드 Path 예: `/webhook/ai`  
+- 로컬 실행 시 URL: `http://localhost:5678/webhook/ai`
+
+### HTML 예시
+```html
+<form action="http://localhost:5678/webhook/ai" method="POST">
+  <input type="text" name="chatInput" placeholder="명령 입력" />
+  <button type="submit">Send</button>
+</form>
+```
+
+### cURL 예시
 ```bash
-docker run -d \
-  -p 5678:5678 \
-  -v ~/.n8n:/home/node/.n8n \
-  --name n8n n8nio/n8n
+curl -X POST   -H "Content-Type: application/json"   -d '{"chatInput":"내일 일정 브리핑해줘"}'   http://localhost:5678/webhook/ai
+```
+
+---
+
+## 7. 트러블슈팅 체크리스트
+
+- 코드 블록 닫힘 누락 여부 확인  
+- Google OAuth 승인 및 API 활성화 확인  
+- Workflow 타임존이 `Asia/Seoul`인지 확인  
+- Docker 실행 시 `--restart unless-stopped` 옵션 사용 권장  
+
+---
+
+## 8. JSON 파일 바로가기
+
+- **기본 비서봇**: [secretary.json](./secretary.json)  
+- **응용 확장 버전**: [up_secretary.json](./up_secretary.json)
+
 

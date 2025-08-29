@@ -96,10 +96,30 @@ AI 활용 방식은 두 가지입니다:
 
 ---
 
-## 4. 응용1 - 뉴스 요약 챗봇
 
-- **RSS Read Tool** → 기술 뉴스 RSS 불러오기  
-- **AI Agent** → 기사 요약  
-- **Gmail Tool** → 요약 결과 메일 발송  
+## 4. 비서봇 실행 (기본 워크플로우)
 
-### 테스트 문구
+- 사용 파일: **[secretary.json](./secretary.json)**
+
+### 4-1) 워크플로우 가져오기
+- n8n UI 상단 메뉴 **Workflows → Import from File** 선택  
+- 저장소의 **`secretary.json`** 파일 업로드 → **Import** 클릭  
+- 워크플로우 이름을 확인하고 저장(⌘/Ctrl + S)
+
+### 4-2) 크리덴셜(자격증명) 연결
+- 각 노드에서 **Credentials**가 연결되어 있는지 확인
+  - **Google Calendar**: `googleCalendarOAuth2Api`
+  - **Google Sheets**: `googleSheetsOAuth2Api`
+  - **Gmail**: `gmailOAuth2`
+  - **OpenAI**: `openAiApi`
+- 처음이라면 노드 안 **Credentials → Add credential** 에서 OAuth 인증/키 등록
+
+### 4-3) 타임존 및 환경 설정
+- **Workflow Settings**(오른쪽 상단 톱니) → **Timezone**: `Asia/Seoul`
+- Docker를 백그라운드로 돌리려면:
+```bash
+docker run -d \
+  -p 5678:5678 \
+  -v ~/.n8n:/home/node/.n8n \
+  --name n8n n8nio/n8n
+

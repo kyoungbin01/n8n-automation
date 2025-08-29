@@ -17,6 +17,12 @@
 
 ---
 
+
+
+https://youtu.be/DhuaKAW819s?si=TRuZOP8i_0Shcta6
+
+
+
 ## 전체 워크플로우 구조
 
 ![](./docs/n8n-workflow-overview.png)  
